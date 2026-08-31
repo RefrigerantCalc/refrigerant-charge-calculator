@@ -1162,7 +1162,7 @@
                 <div class="field">
 
                     <label>
-                        Additional Refrigerant (oz/ft)
+                         Additional Refrigerant Required (oz/ft)
                     </label>
 
                     <input
@@ -1174,7 +1174,52 @@
 
                 </div>
 
+<div class="field full">
 
+    <label for="dbCrossPairCharge">
+        Cross-Pair Additional Refrigerant Charge
+    </label>
+
+    <div class="unit-input">
+
+        <input
+            type="number"
+            id="dbCrossPairCharge"
+            step="0.01"
+            min="0"
+            placeholder="Example: 1.50"
+        >
+
+        <select id="dbCrossPairUnit">
+
+            <option value="oz">oz</option>
+
+            <option value="lb">lb</option>
+
+        </select>
+
+    </div>
+
+    <div class="help-text">
+        Enter additional refrigerant required when the manufacturer specifies a cross-pair condition.
+    </div>
+
+</div>
+
+
+<div class="field full">
+
+    <label for="dbSpecialRequirement">
+        Manufacturer-Specific Refrigerant Requirement
+    </label>
+
+    <textarea
+        id="dbSpecialRequirement"
+        rows="3"
+        placeholder="Example: If cross-pair is used, add 2.00 oz additional refrigerant."
+    ></textarea>
+
+</div>
                 <div class="field full">
 
                     <label>
