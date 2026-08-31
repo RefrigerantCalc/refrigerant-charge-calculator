@@ -1243,6 +1243,22 @@ function loadModel(item) {
     ).value =
         item.chargeRate;
 
+   document.getElementById(
+    "crossPairCharge"
+).value =
+    item.crossPairCharge || 0;
+
+
+document.getElementById(
+    "crossPairUnit"
+).value =
+    item.crossPairUnit || "oz";
+
+
+document.getElementById(
+    "specialRequirement"
+).value =
+    item.specialRequirement || "";
 
     document.getElementById(
         "manufacturerNotes"
@@ -1435,19 +1451,21 @@ function closeModal() {
 
 function clearDatabaseForm() {
 
-    const fields = [
+ const fields = [
 
-        "dbManufacturer",
-        "dbModel",
-        "dbRefrigerant",
-        "dbStandardLength",
-        "dbFactoryCharge",
-        "dbLiquidDiameter",
-        "dbGasDiameter",
-        "dbChargeRate",
-        "dbNotes"
+    "dbManufacturer",
+    "dbModel",
+    "dbRefrigerant",
+    "dbStandardLength",
+    "dbFactoryCharge",
+    "dbLiquidDiameter",
+    "dbGasDiameter",
+    "dbChargeRate",
+    "dbCrossPairCharge",
+    "dbSpecialRequirement",
+    "dbNotes"
 
-    ];
+];
 
 
     fields.forEach(id => {
@@ -1573,18 +1591,34 @@ function saveModel() {
             ).value,
 
         chargeRate:
-            Number(
-                document.getElementById(
-                    "dbChargeRate"
-                ).value
-            ),
+    Number(
+        document.getElementById(
+            "dbChargeRate"
+        ).value
+    ),
 
-        notes:
-            document.getElementById(
-                "dbNotes"
-            ).value
+crossPairCharge:
+    Number(
+        document.getElementById(
+            "dbCrossPairCharge"
+        ).value
+    ),
 
-    };
+crossPairUnit:
+    document.getElementById(
+        "dbCrossPairUnit"
+    ).value,
+
+specialRequirement:
+    document.getElementById(
+        "dbSpecialRequirement"
+    ).value,
+
+notes:
+    document.getElementById(
+        "dbNotes"
+    ).value
+
 
 
     if (id) {
@@ -1712,6 +1746,23 @@ function editModel(id) {
         "dbChargeRate"
     ).value =
         item.chargeRate;
+
+   document.getElementById(
+    "dbCrossPairCharge"
+).value =
+    item.crossPairCharge || 0;
+
+
+document.getElementById(
+    "dbCrossPairUnit"
+).value =
+    item.crossPairUnit || "oz";
+
+
+document.getElementById(
+    "dbSpecialRequirement"
+).value =
+    item.specialRequirement || "";
 
 
     document.getElementById(
