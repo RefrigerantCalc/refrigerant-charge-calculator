@@ -8,9 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Refrigerant Charge Calculator
-    </title>
+    <title>Refrigerant Charge Calculator</title>
 
     <link rel="stylesheet"
           href="style.css">
@@ -24,23 +22,25 @@
 <div class="container">
 
 
-    <!-- HEADER -->
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
     <header>
 
-        <h1>
-            Refrigerant Charge Calculator
-        </h1>
+        <h1>Refrigerant Charge Calculator</h1>
 
         <p>
-            Equipment refrigerant charge and line-set calculation
+            HVAC Refrigerant Charge & Installation Documentation
         </p>
 
     </header>
 
 
 
-    <!-- NAVIGATION -->
+    <!-- =====================================================
+         TABS
+         ===================================================== -->
 
     <div class="tabs">
 
@@ -65,22 +65,23 @@
 
 
 
-    <!-- ================================================= -->
-    <!-- CALCULATOR -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         CALCULATOR
+         ===================================================== -->
 
-    <section id="calculator"
-             class="tab-content active">
+    <section
+        id="calculator"
+        class="tab-content active">
 
+
+        <!-- =================================================
+             MODEL SEARCH
+             ================================================= -->
 
         <div class="card">
 
-            <h2>
-                Equipment Information
-            </h2>
+            <h2>Equipment Information</h2>
 
-
-            <!-- MODEL SEARCH -->
 
             <div class="model-search">
 
@@ -91,7 +92,7 @@
                 <input
                     type="text"
                     id="modelSearch"
-                    placeholder="Type manufacturer or model number..."
+                    placeholder="Search manufacturer or model number..."
                     oninput="searchModels()"
                 >
 
@@ -104,47 +105,38 @@
             </div>
 
 
-
             <div class="grid">
 
 
                 <div class="field">
 
-                    <label>
-                        Manufacturer
-                    </label>
+                    <label>Manufacturer</label>
 
                     <input
                         type="text"
                         id="manufacturer"
-                        placeholder="Carrier"
+                        placeholder="Manufacturer"
                     >
 
                 </div>
 
 
-
                 <div class="field">
 
-                    <label>
-                        Model Number
-                    </label>
+                    <label>Model Number</label>
 
                     <input
                         type="text"
                         id="modelNumber"
-                        placeholder="37MARAQ12AA3"
+                        placeholder="Model Number"
                     >
 
                 </div>
 
 
-
                 <div class="field">
 
-                    <label>
-                        Serial Number
-                    </label>
+                    <label>Serial Number</label>
 
                     <input
                         type="text"
@@ -155,21 +147,341 @@
                 </div>
 
 
+                <div class="field">
+
+                    <label>Equipment Type</label>
+
+                    <select id="equipmentType">
+
+                        <option>Heat Pump</option>
+
+                        <option>Air Conditioner</option>
+
+                        <option>Mini Split</option>
+
+                        <option>Multi-Zone</option>
+
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Refrigerant</label>
+
+                    <input
+                        type="text"
+                        id="refrigerant"
+                        placeholder="R-410A / R-32 / R-454B"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MANUFACTURER STANDARD INFORMATION
+             ================================================= -->
+
+        <div class="card">
+
+            <h2>
+                Manufacturer Standard Information
+            </h2>
+
+
+            <div class="grid">
+
+
+                <!-- PRE-CHARGE LENGTH -->
 
                 <div class="field">
 
                     <label>
-                        Equipment Type
+                        Pre-Charge / Standard Line Length (ft)
                     </label>
 
-                    <select id="equipmentType">
+                    <input
+                        type="number"
+                        id="standardLength"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 25"
+                    >
 
-                        <option>
-                            Heat Pump
+                </div>
+
+
+
+                <!-- FACTORY CHARGE VALUE -->
+
+                <div class="field">
+
+                    <label>
+                        Factory / Pre-Charged Refrigerant
+                    </label>
+
+                    <div class="unit-input">
+
+                        <input
+                            type="number"
+                            id="factoryChargeValue"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 7.32"
+                        >
+
+
+                        <select
+                            id="factoryChargeUnit"
+                            onchange="convertFactoryCharge()">
+
+                            <option value="lb">
+                                LB
+                            </option>
+
+                            <option value="oz">
+                                OZ
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FACTORY CONVERSION -->
+
+                <div class="field full">
+
+                    <label>
+                        Factory Charge Conversion
+                    </label>
+
+                    <div
+                        id="factoryConversion"
+                        class="conversion-display">
+
+                        Enter factory charge above.
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LIQUID LINE -->
+
+                <div class="field">
+
+                    <label>
+                        Liquid Line Diameter (in)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="liquidLineDiameter"
+                        placeholder='Example: 3/8"'
+                    >
+
+                </div>
+
+
+
+                <!-- GAS LINE -->
+
+                <div class="field">
+
+                    <label>
+                        Gas / Suction Line Diameter (in)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="gasLineDiameter"
+                        placeholder='Example: 5/8"'
+                    >
+
+                </div>
+
+
+
+                <!-- MANUFACTURER NOTES -->
+
+                <div class="field full">
+
+                    <label>
+                        Manufacturer Standard Notes
+                    </label>
+
+                    <textarea
+                        id="manufacturerNotes"
+                        rows="3"
+                        placeholder="Manufacturer-specific information..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             INSTALLATION INFORMATION
+             ================================================= -->
+
+        <div class="card">
+
+            <h2>
+                Installation Information
+            </h2>
+
+
+            <div class="grid">
+
+
+                <!-- INSTALLED LINE LENGTH -->
+
+                <div class="field">
+
+                    <label>
+                        Installed Refrigerant Line Length (ft)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="installedLength"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 50"
+                    >
+
+                </div>
+
+
+
+                <!-- ADDITIONAL LINE LENGTH -->
+
+                <div class="field">
+
+                    <label>
+                        Additional Refrigerant Line Length (ft)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="additionalLineLength"
+                        readonly
+                        placeholder="Calculated"
+                    >
+
+                </div>
+
+
+
+                <!-- CHARGE RATE -->
+
+                <div class="field">
+
+                    <label>
+                        Additional Refrigerant Required (oz/ft)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="chargeRate"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 0.70"
+                    >
+
+                </div>
+
+
+
+                <!-- LIQUID LINE -->
+
+                <div class="field">
+
+                    <label>
+                        Installed Liquid Line Diameter (in)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="installedLiquidDiameter"
+                        placeholder='Example: 3/8"'
+                    >
+
+                </div>
+
+
+
+                <!-- GAS LINE -->
+
+                <div class="field">
+
+                    <label>
+                        Installed Gas / Suction Line Diameter (in)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="installedGasDiameter"
+                        placeholder='Example: 5/8"'
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SPECIAL MANUFACTURER REQUIREMENTS
+             ================================================= -->
+
+        <div class="card">
+
+            <h2>
+                Manufacturer-Specific Charging Requirements
+            </h2>
+
+
+            <div class="grid">
+
+
+                <!-- CROSS PAIR -->
+
+                <div class="field">
+
+                    <label>
+                        Cross-Pair Used?
+                    </label>
+
+                    <select
+                        id="crossPairUsed"
+                        onchange="toggleCrossPair()">
+
+                        <option value="no">
+                            No
                         </option>
 
-                        <option>
-                            Air Conditioner
+                        <option value="yes">
+                            Yes
                         </option>
 
                     </select>
@@ -178,17 +490,97 @@
 
 
 
+                <!-- CROSS PAIR CHARGE -->
+
                 <div class="field">
 
                     <label>
-                        Refrigerant
+                        Cross-Pair Additional Charge
                     </label>
 
-                    <input
-                        type="text"
-                        id="refrigerant"
-                        placeholder="R-454B"
-                    >
+                    <div class="unit-input">
+
+                        <input
+                            type="number"
+                            id="crossPairCharge"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            disabled
+                        >
+
+
+                        <select
+                            id="crossPairUnit"
+                            disabled>
+
+                            <option value="oz">
+                                OZ
+                            </option>
+
+                            <option value="lb">
+                                LB
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- OTHER SPECIAL CHARGE -->
+
+                <div class="field">
+
+                    <label>
+                        Other Additional Charge
+                    </label>
+
+                    <div class="unit-input">
+
+                        <input
+                            type="number"
+                            id="otherCharge"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                        >
+
+
+                        <select
+                            id="otherChargeUnit">
+
+                            <option value="oz">
+                                OZ
+                            </option>
+
+                            <option value="lb">
+                                LB
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SPECIAL CONDITION -->
+
+                <div class="field full">
+
+                    <label>
+                        Special Manufacturer Requirement / Condition
+                    </label>
+
+                    <textarea
+                        id="specialRequirement"
+                        rows="4"
+                        placeholder="Example: Additional charge required when cross-pair is used..."
+                    ></textarea>
 
                 </div>
 
@@ -198,155 +590,9 @@
 
 
 
-        <!-- FACTORY CHARGE -->
-
-        <div class="card">
-
-            <h2>
-                Factory Refrigerant Charge
-            </h2>
-
-
-            <div class="grid">
-
-
-                <div class="field">
-
-                    <label>
-                        Factory Charge (lb)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="factoryLb"
-                        min="0"
-                        step="0.01"
-                        placeholder="Example: 2"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Factory Charge (oz)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="factoryOz"
-                        min="0"
-                        max="15.99"
-                        step="0.01"
-                        placeholder="Example: 0.48"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Factory Charge (Total lb)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="factoryTotalLb"
-                        min="0"
-                        step="0.0001"
-                        placeholder="Optional"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <p class="help-text">
-
-                Enter either lb + oz OR the total factory charge in lb.
-
-            </p>
-
-        </div>
-
-
-
-        <!-- LINE SET -->
-
-        <div class="card">
-
-            <h2>
-                Refrigerant Line Information
-            </h2>
-
-
-            <div class="grid">
-
-
-                <div class="field">
-
-                    <label>
-                        Standard Line Length (ft)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="standardLength"
-                        min="0"
-                        step="0.1"
-                        value="24.6"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Installed Line Length (ft)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="installedLength"
-                        min="0"
-                        step="0.1"
-                        placeholder="Example: 50"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Additional Charge Rate (oz/ft)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="chargeRate"
-                        min="0"
-                        step="0.01"
-                        placeholder="Example: 0.16"
-                    >
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- CALCULATE -->
+        <!-- =================================================
+             CALCULATE BUTTON
+             ================================================= -->
 
         <div class="button-row">
 
@@ -371,7 +617,9 @@
 
 
 
-        <!-- RESULTS -->
+        <!-- =================================================
+             RESULTS
+             ================================================= -->
 
         <div
             id="results"
@@ -383,6 +631,9 @@
                 Refrigerant Charge Calculation
             </h2>
 
+
+
+            <!-- RESULT SUMMARY -->
 
             <div class="result-grid">
 
@@ -400,11 +651,10 @@
                 </div>
 
 
-
                 <div class="result-box">
 
                     <span>
-                        Standard Line
+                        Pre-Charge Length
                     </span>
 
                     <strong id="resultStandard">
@@ -412,7 +662,6 @@
                     </strong>
 
                 </div>
-
 
 
                 <div class="result-box">
@@ -428,7 +677,6 @@
                 </div>
 
 
-
                 <div class="result-box">
 
                     <span>
@@ -440,7 +688,6 @@
                     </strong>
 
                 </div>
-
 
 
                 <div class="result-box">
@@ -456,7 +703,6 @@
                 </div>
 
 
-
                 <div class="result-box">
 
                     <span>
@@ -470,11 +716,23 @@
                 </div>
 
 
+                <div class="result-box">
+
+                    <span>
+                        Special Additional Charge
+                    </span>
+
+                    <strong id="resultSpecial">
+                        -
+                    </strong>
+
+                </div>
+
 
                 <div class="result-box total">
 
                     <span>
-                        Total Refrigerant
+                        Total Refrigerant Charge
                     </span>
 
                     <strong id="resultTotal">
@@ -487,20 +745,47 @@
 
 
 
-            <!-- CHEERS SUMMARY -->
+            <!-- =================================================
+                 CALCULATION BREAKDOWN
+                 ================================================= -->
 
-            <div class="cheers-box">
+            <div class="calculation-box">
 
                 <h3>
-                    CHEERS Documentation
+                    Calculation Breakdown
                 </h3>
 
 
-                <pre id="cheersSummary"></pre>
+                <div
+                    id="calculationBreakdown"
+                    class="calculation-breakdown">
+
+                </div>
 
             </div>
 
 
+
+            <!-- =================================================
+                 CHEERS DOCUMENTATION
+                 ================================================= -->
+
+            <div class="cheers-box">
+
+                <h3>
+                    CHEERS Refrigerant Information
+                </h3>
+
+
+                <pre
+                    id="cheersSummary">
+                </pre>
+
+            </div>
+
+
+
+            <!-- COPY BUTTONS -->
 
             <div class="button-row">
 
@@ -529,9 +814,9 @@
 
 
 
-    <!-- ================================================= -->
-    <!-- DATABASE -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         EQUIPMENT DATABASE
+         ===================================================== -->
 
     <section
         id="database"
@@ -539,6 +824,7 @@
 
 
         <div class="card">
+
 
             <div class="database-header">
 
@@ -549,7 +835,7 @@
                     </h2>
 
                     <p>
-                        Add and manage your equipment models.
+                        Store manufacturer-specific refrigerant information.
                     </p>
 
                 </div>
@@ -567,19 +853,19 @@
 
 
 
-            <!-- DATABASE SEARCH -->
+            <!-- SEARCH -->
 
             <input
                 type="text"
                 id="databaseSearch"
                 class="database-search"
-                placeholder="Search manufacturer, model, or refrigerant..."
+                placeholder="Search manufacturer, model, refrigerant..."
                 oninput="renderDatabase()"
             >
 
 
 
-            <!-- DATABASE TABLE -->
+            <!-- TABLE -->
 
             <div class="table-wrapper">
 
@@ -602,11 +888,19 @@
                             </th>
 
                             <th>
+                                Pre-Charge
+                            </th>
+
+                            <th>
                                 Factory Charge
                             </th>
 
                             <th>
-                                Standard Line
+                                Liquid Line
+                            </th>
+
+                            <th>
+                                Gas Line
                             </th>
 
                             <th>
@@ -630,6 +924,9 @@
 
             </div>
 
+
+
+            <!-- DATABASE TOOLS -->
 
             <div class="database-tools">
 
@@ -676,9 +973,9 @@
 
 
 
-    <!-- ================================================= -->
-    <!-- ADD / EDIT MODEL MODAL -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         ADD / EDIT MODEL
+         ===================================================== -->
 
     <div
         id="modelModal"
@@ -695,6 +992,7 @@
                     Add Equipment
                 </h2>
 
+
                 <button
                     class="close"
                     onclick="closeModal()">
@@ -706,11 +1004,11 @@
             </div>
 
 
-
             <input
                 type="hidden"
                 id="editId"
             >
+
 
 
             <div class="grid">
@@ -730,7 +1028,6 @@
                 </div>
 
 
-
                 <div class="field">
 
                     <label>
@@ -745,7 +1042,6 @@
                 </div>
 
 
-
                 <div class="field">
 
                     <label>
@@ -754,18 +1050,19 @@
 
                     <select id="dbEquipmentType">
 
-                        <option>
-                            Heat Pump
-                        </option>
+                        <option>Heat Pump</option>
 
-                        <option>
-                            Air Conditioner
-                        </option>
+                        <option>Air Conditioner</option>
+
+                        <option>Mini Split</option>
+
+                        <option>Multi-Zone</option>
+
+                        <option>Other</option>
 
                     </select>
 
                 </div>
-
 
 
                 <div class="field">
@@ -777,69 +1074,95 @@
                     <input
                         id="dbRefrigerant"
                         type="text"
-                        placeholder="R-454B"
                     >
 
                 </div>
 
 
-
                 <div class="field">
 
                     <label>
-                        Factory Charge (lb) *
-                    </label>
-
-                    <input
-                        id="dbFactoryLb"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Factory Charge (oz)
-                    </label>
-
-                    <input
-                        id="dbFactoryOz"
-                        type="number"
-                        min="0"
-                        max="15.99"
-                        step="0.01"
-                    >
-
-                </div>
-
-
-
-                <div class="field">
-
-                    <label>
-                        Standard Line Length (ft) *
+                        Pre-Charge Length (ft) *
                     </label>
 
                     <input
                         id="dbStandardLength"
                         type="number"
                         min="0"
-                        step="0.1"
+                        step="0.01"
                     >
 
                 </div>
 
 
+                <div class="field">
+
+                    <label>
+                        Factory Charge
+                    </label>
+
+                    <div class="unit-input">
+
+                        <input
+                            id="dbFactoryCharge"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                        >
+
+
+                        <select
+                            id="dbFactoryChargeUnit">
+
+                            <option value="lb">
+                                LB
+                            </option>
+
+                            <option value="oz">
+                                OZ
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
 
                 <div class="field">
 
                     <label>
-                        Additional Charge Rate (oz/ft) *
+                        Liquid Line Diameter (in)
+                    </label>
+
+                    <input
+                        id="dbLiquidDiameter"
+                        type="text"
+                        placeholder='Example: 3/8"'
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Gas Line Diameter (in)
+                    </label>
+
+                    <input
+                        id="dbGasDiameter"
+                        type="text"
+                        placeholder='Example: 5/8"'
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Additional Refrigerant (oz/ft)
                     </label>
 
                     <input
@@ -852,17 +1175,15 @@
                 </div>
 
 
-
                 <div class="field full">
 
                     <label>
-                        Notes
+                        Manufacturer Notes
                     </label>
 
                     <textarea
                         id="dbNotes"
-                        rows="3"
-                        placeholder="Manufacturer manual, source, charging notes, etc.">
+                        rows="3">
                     </textarea>
 
                 </div>
@@ -897,6 +1218,10 @@
     </div>
 
 
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
 
     <footer>
 
