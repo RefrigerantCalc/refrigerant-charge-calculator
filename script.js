@@ -1618,7 +1618,7 @@ notes:
     document.getElementById(
         "dbNotes"
     ).value
-
+};
 
 
     if (id) {
