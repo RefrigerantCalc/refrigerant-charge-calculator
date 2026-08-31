@@ -1184,103 +1184,56 @@ function searchModels() {
 
 function loadModel(item) {
 
-    document.getElementById(
-        "manufacturer"
-    ).value =
-        item.manufacturer;
+    document.getElementById("manufacturer").value =
+        item.manufacturer || "";
 
+    document.getElementById("modelNumber").value =
+        item.model || "";
 
-    document.getElementById(
-        "modelNumber"
-    ).value =
-        item.model;
+    document.getElementById("equipmentType").value =
+        item.equipmentType || "Heat Pump";
 
+    document.getElementById("refrigerant").value =
+        item.refrigerant || "";
 
-    document.getElementById(
-        "equipmentType"
-    ).value =
-        item.equipmentType;
+    document.getElementById("standardLength").value =
+        item.standardLength || "";
 
+    document.getElementById("factoryChargeValue").value =
+        item.factoryCharge || "";
 
-    document.getElementById(
-        "refrigerant"
-    ).value =
-        item.refrigerant;
+    document.getElementById("factoryChargeUnit").value =
+        item.factoryChargeUnit || "lb";
 
+    document.getElementById("liquidLineDiameter").value =
+        item.liquidDiameter || "";
 
-    document.getElementById(
-        "standardLength"
-    ).value =
-        item.standardLength;
+    document.getElementById("gasLineDiameter").value =
+        item.gasDiameter || "";
 
+    document.getElementById("chargeRate").value =
+        item.chargeRate || "";
 
-    document.getElementById(
-        "factoryChargeValue"
-    ).value =
-        item.factoryCharge;
+    document.getElementById("crossPairCharge").value =
+        item.crossPairCharge || 0;
 
+    document.getElementById("crossPairUnit").value =
+        item.crossPairUnit || "oz";
 
-    document.getElementById(
-        "factoryChargeUnit"
-    ).value =
-        item.factoryChargeUnit;
+    document.getElementById("specialRequirement").value =
+        item.specialRequirement || "";
 
-
-    document.getElementById(
-        "liquidLineDiameter"
-    ).value =
-        item.liquidDiameter;
-
-
-    document.getElementById(
-        "gasLineDiameter"
-    ).value =
-        item.gasDiameter;
-
-
-    document.getElementById(
-        "chargeRate"
-    ).value =
-        item.chargeRate;
-
-   document.getElementById(
-    "crossPairCharge"
-).value =
-    item.crossPairCharge || 0;
-
-
-document.getElementById(
-    "crossPairUnit"
-).value =
-    item.crossPairUnit || "oz";
-
-
-document.getElementById(
-    "specialRequirement"
-).value =
-    item.specialRequirement || "";
-
-    document.getElementById(
-        "manufacturerNotes"
-    ).value =
+    document.getElementById("manufacturerNotes").value =
         item.notes || "";
-
 
     convertFactoryCharge();
 
+    document.getElementById("modelResults").innerHTML = "";
 
-    document.getElementById(
-        "modelResults"
-    ).innerHTML = "";
-
-
-    document.getElementById(
-        "modelSearch"
-    ).value =
-        item.model;
+    document.getElementById("modelSearch").value =
+        item.model || "";
 
 }
-
 
 /* =========================================================
    DATABASE RENDER
