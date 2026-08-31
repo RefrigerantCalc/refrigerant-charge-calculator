@@ -1,382 +1,2021 @@
-* {
-    box-sizing: border-box;
-}
+/* =========================================================
+   REFRIGERANT CHARGE CALCULATOR
+   ========================================================= */
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f8;
-    color: #222;
-}
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
+/* =========================================================
+   DATABASE
+   ========================================================= */
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
+let equipmentDatabase =
+    JSON.parse(localStorage.getItem("equipmentDatabase")) || [
 
-header h1 {
-    margin-bottom: 5px;
-}
+    {
+        id: Date.now(),
+        manufacturer: "Example",
+        model: "EXAMPLE-001",
+        equipmentType: "Heat Pump",
+        refrigerant: "R-454B",
 
-header p {
-    color: #666;
-}
+        standardLength: 25,
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        factoryCharge: 7.32,
+        factoryChargeUnit: "lb",
 
-.tab-button {
-    padding: 12px 22px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #ddd;
-    font-weight: bold;
-}
+        liquidDiameter: '3/8"',
+        gasDiameter: '5/8"',
 
-.tab-button.active {
-    background: #333;
-    color: white;
-}
+        chargeRate: 0.70,
 
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.card {
-    background: white;
-    padding: 22px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.card h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
-.card h3 {
-    margin-top: 0;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-}
-
-.field.full {
-    grid-column: 1 / -1;
-}
-
-label {
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-textarea {
-    resize: vertical;
-}
-
-.unit-input {
-    display: flex;
-    gap: 8px;
-}
-
-.unit-input input {
-    flex: 1;
-}
-
-.unit-input select {
-    width: 90px;
-}
-
-.conversion-display {
-    padding: 12px;
-    background: #f1f5f9;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-.button-row {
-    display: flex;
-    gap: 10px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-}
-
-button {
-    font-size: 15px;
-}
-
-.primary,
-.secondary,
-.danger {
-    padding: 11px 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.primary {
-    background: #333;
-    color: white;
-}
-
-.secondary {
-    background: #ddd;
-    color: #222;
-}
-
-.danger {
-    background: #b42318;
-    color: white;
-}
-
-.primary:hover,
-.secondary:hover,
-.danger:hover,
-.tab-button:hover {
-    opacity: 0.85;
-}
-
-.model-search {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.model-results {
-    position: absolute;
-    width: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    z-index: 20;
-    max-height: 250px;
-    overflow-y: auto;
-}
-
-.model-result {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-}
-
-.model-result:hover {
-    background: #f1f1f1;
-}
-
-.results {
-    border: 2px solid #333;
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.result-box {
-    padding: 15px;
-    background: #f5f6f7;
-    border-radius: 8px;
-}
-
-.result-box span {
-    display: block;
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 8px;
-}
-
-.result-box strong {
-    font-size: 18px;
-}
-
-.result-box.total {
-    grid-column: span 2;
-    background: #e9eef3;
-}
-
-.calculation-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f8fafc;
-    border: 1px solid #d5dbe1;
-    border-radius: 8px;
-}
-
-.calculation-breakdown {
-    font-family: "Courier New", monospace;
-    white-space: pre-wrap;
-    line-height: 1.7;
-    font-size: 16px;
-}
-
-.cheers-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f7f7f7;
-    border-radius: 8px;
-}
-
-.cheers-box pre {
-    white-space: pre-wrap;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.6;
-}
-
-.database-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.database-search {
-    margin-bottom: 20px;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1000px;
-}
-
-th,
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background: #f1f3f5;
-}
-
-.database-tools {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 100;
-}
-
-.modal-content {
-    background: white;
-    width: 100%;
-    max-width: 900px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.close {
-    border: none;
-    background: transparent;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-footer {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    padding: 20px;
-}
-
-@media (max-width: 800px) {
-
-    .grid {
-        grid-template-columns: 1fr;
+        notes: "Example data only. Verify manufacturer documentation."
     }
 
-    .field.full {
-        grid-column: auto;
-    }
+];
 
-    .result-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 
-    .database-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+/* =========================================================
+   SAVE DATABASE
+   ========================================================= */
+
+function saveDatabase() {
+
+    localStorage.setItem(
+        "equipmentDatabase",
+        JSON.stringify(equipmentDatabase)
+    );
+
 }
 
-@media (max-width: 500px) {
 
-    .container {
-        padding: 10px;
+/* =========================================================
+   TAB CONTROL
+   ========================================================= */
+
+function showTab(tabName) {
+
+    document.querySelectorAll(".tab-content")
+        .forEach(tab => {
+
+            tab.classList.remove("active");
+
+        });
+
+
+    document.querySelectorAll(".tab-button")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+        });
+
+
+    document.getElementById(tabName)
+        .classList.add("active");
+
+
+    const buttons =
+        document.querySelectorAll(".tab-button");
+
+
+    buttons.forEach(button => {
+
+        if (
+            button.textContent
+                .toLowerCase()
+                .includes(
+                    tabName === "calculator"
+                        ? "calculator"
+                        : "database"
+                )
+        ) {
+
+            button.classList.add("active");
+
+        }
+
+    });
+
+
+    if (tabName === "database") {
+
+        renderDatabase();
+
     }
 
-    .result-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .result-box.total {
-        grid-column: span 1;
-    }
-
-    .unit-input {
-        flex-direction: column;
-    }
-
-    .unit-input select {
-        width: 100%;
-    }
 }
+
+
+/* =========================================================
+   LB / OZ CONVERSION
+   ========================================================= */
+
+function lbToOz(lb) {
+
+    return Number(lb || 0) * 16;
+
+}
+
+
+function ozToLbOz(oz) {
+
+    oz = Number(oz || 0);
+
+    const lb =
+        Math.floor(oz / 16);
+
+    const remainingOz =
+        oz - (lb * 16);
+
+
+    return {
+        lb: lb,
+        oz: remainingOz
+    };
+
+}
+
+
+function formatLbOz(totalOz) {
+
+    const converted =
+        ozToLbOz(totalOz);
+
+
+    return (
+        converted.lb +
+        " lb " +
+        converted.oz.toFixed(2) +
+        " oz"
+    );
+
+}
+
+
+/* =========================================================
+   FACTORY CHARGE CONVERSION
+   ========================================================= */
+
+function convertFactoryCharge() {
+
+    const value =
+        Number(
+            document.getElementById(
+                "factoryChargeValue"
+            ).value
+        );
+
+
+    const unit =
+        document.getElementById(
+            "factoryChargeUnit"
+        ).value;
+
+
+    if (!value) {
+
+        document.getElementById(
+            "factoryConversion"
+        ).textContent =
+            "Enter factory charge above.";
+
+        return;
+
+    }
+
+
+    let totalOz;
+
+
+    if (unit === "lb") {
+
+        totalOz =
+            lbToOz(value);
+
+    } else {
+
+        totalOz =
+            value;
+
+    }
+
+
+    document.getElementById(
+        "factoryConversion"
+    ).textContent =
+
+        "Converted: " +
+        formatLbOz(totalOz) +
+        " | Total: " +
+        totalOz.toFixed(2) +
+        " oz";
+
+}
+
+
+/* =========================================================
+   CROSS PAIR CONTROL
+   ========================================================= */
+
+function toggleCrossPair() {
+
+    const enabled =
+        document.getElementById(
+            "crossPairUsed"
+        ).value === "yes";
+
+
+    document.getElementById(
+        "crossPairCharge"
+    ).disabled = !enabled;
+
+
+    document.getElementById(
+        "crossPairUnit"
+    ).disabled = !enabled;
+
+
+    if (!enabled) {
+
+        document.getElementById(
+            "crossPairCharge"
+        ).value = 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   CALCULATE FACTORY CHARGE
+   ========================================================= */
+
+function getFactoryChargeOz() {
+
+    const value =
+        Number(
+            document.getElementById(
+                "factoryChargeValue"
+            ).value
+        );
+
+
+    const unit =
+        document.getElementById(
+            "factoryChargeUnit"
+        ).value;
+
+
+    if (!value) {
+
+        return 0;
+
+    }
+
+
+    if (unit === "lb") {
+
+        return lbToOz(value);
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =========================================================
+   CALCULATE ADDITIONAL LINE LENGTH
+   ========================================================= */
+
+function calculateAdditionalLineLength(
+    installedLength,
+    standardLength
+) {
+
+    const additional =
+        Number(installedLength) -
+        Number(standardLength);
+
+
+    return Math.max(
+        0,
+        additional
+    );
+
+}
+
+
+/* =========================================================
+   CALCULATE
+   ========================================================= */
+
+function calculate() {
+
+    const standardLength =
+        Number(
+            document.getElementById(
+                "standardLength"
+            ).value
+        );
+
+
+    const installedLength =
+        Number(
+            document.getElementById(
+                "installedLength"
+            ).value
+        );
+
+
+    const chargeRate =
+        Number(
+            document.getElementById(
+                "chargeRate"
+            ).value
+        );
+
+
+    if (
+        !standardLength ||
+        !installedLength
+    ) {
+
+        alert(
+            "Please enter the pre-charge length and installed line length."
+        );
+
+        return;
+
+    }
+
+
+    const additionalLineLength =
+        calculateAdditionalLineLength(
+            installedLength,
+            standardLength
+        );
+
+
+    const lineChargeOz =
+        additionalLineLength *
+        chargeRate;
+
+
+    /* =====================================================
+       CROSS PAIR CHARGE
+       ===================================================== */
+
+    const crossPairUsed =
+        document.getElementById(
+            "crossPairUsed"
+        ).value === "yes";
+
+
+    let crossPairOz = 0;
+
+
+    if (crossPairUsed) {
+
+        const crossPairValue =
+            Number(
+                document.getElementById(
+                    "crossPairCharge"
+                ).value
+            );
+
+
+        const crossPairUnit =
+            document.getElementById(
+                "crossPairUnit"
+            ).value;
+
+
+        if (crossPairUnit === "lb") {
+
+            crossPairOz =
+                lbToOz(
+                    crossPairValue
+                );
+
+        } else {
+
+            crossPairOz =
+                crossPairValue;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       OTHER CHARGE
+       ===================================================== */
+
+    const otherValue =
+        Number(
+            document.getElementById(
+                "otherCharge"
+            ).value
+        );
+
+
+    const otherUnit =
+        document.getElementById(
+            "otherChargeUnit"
+        ).value;
+
+
+    let otherOz = 0;
+
+
+    if (otherUnit === "lb") {
+
+        otherOz =
+            lbToOz(otherValue);
+
+    } else {
+
+        otherOz =
+            otherValue;
+
+    }
+
+
+    /* =====================================================
+       TOTAL ADDITIONAL
+       ===================================================== */
+
+    const totalAdditionalOz =
+        lineChargeOz +
+        crossPairOz +
+        otherOz;
+
+
+    /* =====================================================
+       FACTORY CHARGE
+       ===================================================== */
+
+    const factoryChargeOz =
+        getFactoryChargeOz();
+
+
+    /* =====================================================
+       TOTAL SYSTEM CHARGE
+       ===================================================== */
+
+    const totalSystemOz =
+        factoryChargeOz +
+        totalAdditionalOz;
+
+
+    /* =====================================================
+       DISPLAY RESULTS
+       ===================================================== */
+
+    document.getElementById(
+        "additionalLineLength"
+    ).value =
+        additionalLineLength.toFixed(2);
+
+
+    document.getElementById(
+        "results"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultFactory"
+    ).textContent =
+        formatLbOz(factoryChargeOz);
+
+
+    document.getElementById(
+        "resultStandard"
+    ).textContent =
+        standardLength.toFixed(2) +
+        " ft";
+
+
+    document.getElementById(
+        "resultInstalled"
+    ).textContent =
+        installedLength.toFixed(2) +
+        " ft";
+
+
+    document.getElementById(
+        "resultAdditionalLine"
+    ).textContent =
+        additionalLineLength.toFixed(2) +
+        " ft";
+
+
+    document.getElementById(
+        "resultRate"
+    ).textContent =
+        chargeRate.toFixed(2) +
+        " oz/ft";
+
+
+    document.getElementById(
+        "resultAdditional"
+    ).textContent =
+        formatLbOz(
+            lineChargeOz
+        );
+
+
+    document.getElementById(
+        "resultSpecial"
+    ).textContent =
+        formatLbOz(
+            crossPairOz +
+            otherOz
+        );
+
+
+    document.getElementById(
+        "resultTotal"
+    ).textContent =
+        formatLbOz(
+            totalSystemOz
+        );
+
+
+    /* =====================================================
+       CALCULATION BREAKDOWN
+       ===================================================== */
+
+    let breakdown = "";
+
+
+    breakdown +=
+        "ADDITIONAL REFRIGERANT LINE CALCULATION\n\n";
+
+
+    breakdown +=
+        "Installed Line Length\n" +
+        installedLength.toFixed(2) +
+        " ft\n\n";
+
+
+    breakdown +=
+        "− Pre-Charge / Standard Line Length\n" +
+        standardLength.toFixed(2) +
+        " ft\n\n";
+
+
+    breakdown +=
+        "────────────────────────────\n";
+
+
+    breakdown +=
+        "Additional Line Length\n" +
+        additionalLineLength.toFixed(2) +
+        " ft\n\n";
+
+
+    breakdown +=
+        "Additional Refrigerant Calculation\n\n";
+
+
+    breakdown +=
+        additionalLineLength.toFixed(2) +
+        " ft × " +
+        chargeRate.toFixed(2) +
+        " oz/ft\n";
+
+
+    breakdown +=
+        "= " +
+        lineChargeOz.toFixed(2) +
+        " oz\n";
+
+
+    breakdown +=
+        "= " +
+        formatLbOz(lineChargeOz) +
+        "\n\n";
+
+
+    /* =====================================================
+       SPECIAL CHARGES
+       ===================================================== */
+
+    if (crossPairUsed) {
+
+        breakdown +=
+            "CROSS-PAIR ADDITIONAL CHARGE\n\n";
+
+
+        breakdown +=
+            "+ " +
+            crossPairOz.toFixed(2) +
+            " oz\n";
+
+
+        breakdown +=
+            "= " +
+            formatLbOz(
+                crossPairOz
+            ) +
+            "\n\n";
+
+    }
+
+
+    if (otherOz > 0) {
+
+        breakdown +=
+            "OTHER ADDITIONAL CHARGE\n\n";
+
+
+        breakdown +=
+            "+ " +
+            otherOz.toFixed(2) +
+            " oz\n";
+
+
+        breakdown +=
+            "= " +
+            formatLbOz(
+                otherOz
+            ) +
+            "\n\n";
+
+    }
+
+
+    breakdown +=
+        "TOTAL ADDITIONAL REFRIGERANT\n\n";
+
+
+    breakdown +=
+        totalAdditionalOz.toFixed(2) +
+        " oz\n";
+
+
+    breakdown +=
+        "= " +
+        formatLbOz(
+            totalAdditionalOz
+        ) +
+        "\n\n";
+
+
+    breakdown +=
+        "FACTORY CHARGE\n";
+
+
+    breakdown +=
+        formatLbOz(
+            factoryChargeOz
+        ) +
+        "\n\n";
+
+
+    breakdown +=
+        "+ TOTAL ADDITIONAL REFRIGERANT\n";
+
+
+    breakdown +=
+        formatLbOz(
+            totalAdditionalOz
+        ) +
+        "\n\n";
+
+
+    breakdown +=
+        "════════════════════════════\n";
+
+
+    breakdown +=
+        "TOTAL SYSTEM REFRIGERANT\n";
+
+
+    breakdown +=
+        formatLbOz(
+            totalSystemOz
+        );
+
+
+    document.getElementById(
+        "calculationBreakdown"
+    ).textContent =
+        breakdown;
+
+
+    /* =====================================================
+       CHEERS SUMMARY
+       ===================================================== */
+
+    generateCheersSummary();
+
+}
+
+
+/* =========================================================
+   CHEERS SUMMARY
+   ========================================================= */
+
+function generateCheersSummary() {
+
+    const manufacturer =
+        document.getElementById(
+            "manufacturer"
+        ).value;
+
+
+    const model =
+        document.getElementById(
+            "modelNumber"
+        ).value;
+
+
+    const serial =
+        document.getElementById(
+            "serialNumber"
+        ).value;
+
+
+    const equipmentType =
+        document.getElementById(
+            "equipmentType"
+        ).value;
+
+
+    const refrigerant =
+        document.getElementById(
+            "refrigerant"
+        ).value;
+
+
+    const standardLength =
+        document.getElementById(
+            "standardLength"
+        ).value;
+
+
+    const installedLength =
+        document.getElementById(
+            "installedLength"
+        ).value;
+
+
+    const additionalLength =
+        document.getElementById(
+            "additionalLineLength"
+        ).value;
+
+
+    const chargeRate =
+        document.getElementById(
+            "chargeRate"
+        ).value;
+
+
+    const liquidDiameter =
+        document.getElementById(
+            "installedLiquidDiameter"
+        ).value ||
+        document.getElementById(
+            "liquidLineDiameter"
+        ).value;
+
+
+    const gasDiameter =
+        document.getElementById(
+            "installedGasDiameter"
+        ).value ||
+        document.getElementById(
+            "gasLineDiameter"
+        ).value;
+
+
+    const specialRequirement =
+        document.getElementById(
+            "specialRequirement"
+        ).value;
+
+
+    const factoryChargeOz =
+        getFactoryChargeOz();
+
+
+    const crossPairUsed =
+        document.getElementById(
+            "crossPairUsed"
+        ).value === "yes";
+
+
+    const crossPairValue =
+        Number(
+            document.getElementById(
+                "crossPairCharge"
+            ).value
+        );
+
+
+    const crossPairUnit =
+        document.getElementById(
+            "crossPairUnit"
+        ).value;
+
+
+    let crossPairOz = 0;
+
+
+    if (crossPairUsed) {
+
+        crossPairOz =
+            crossPairUnit === "lb"
+                ? lbToOz(crossPairValue)
+                : crossPairValue;
+
+    }
+
+
+    const otherValue =
+        Number(
+            document.getElementById(
+                "otherCharge"
+            ).value
+        );
+
+
+    const otherUnit =
+        document.getElementById(
+            "otherChargeUnit"
+        ).value;
+
+
+    const otherOz =
+        otherUnit === "lb"
+            ? lbToOz(otherValue)
+            : otherValue;
+
+
+    const lineChargeOz =
+        Number(additionalLength) *
+        Number(chargeRate);
+
+
+    const totalAdditionalOz =
+        lineChargeOz +
+        crossPairOz +
+        otherOz;
+
+
+    const totalSystemOz =
+        factoryChargeOz +
+        totalAdditionalOz;
+
+
+    let text = "";
+
+
+    text +=
+        "CHEERS REFRIGERANT INFORMATION\n\n";
+
+
+    text +=
+        "Manufacturer: " +
+        manufacturer +
+        "\n";
+
+
+    text +=
+        "Model: " +
+        model +
+        "\n";
+
+
+    if (serial) {
+
+        text +=
+            "Serial Number: " +
+            serial +
+            "\n";
+
+    }
+
+
+    text +=
+        "Equipment Type: " +
+        equipmentType +
+        "\n";
+
+
+    text +=
+        "Refrigerant: " +
+        refrigerant +
+        "\n\n";
+
+
+    text +=
+        "MANUFACTURER STANDARD INFORMATION\n\n";
+
+
+    text +=
+        "Pre-Charge / Standard Line Length: " +
+        standardLength +
+        " ft\n";
+
+
+    text +=
+        "Factory Refrigerant Charge: " +
+        formatLbOz(
+            factoryChargeOz
+        ) +
+        "\n";
+
+
+    text +=
+        "Liquid Line Diameter: " +
+        liquidDiameter +
+        "\n";
+
+
+    text +=
+        "Gas / Suction Line Diameter: " +
+        gasDiameter +
+        "\n\n";
+
+
+    text +=
+        "INSTALLATION INFORMATION\n\n";
+
+
+    text +=
+        "Installed Line Length: " +
+        installedLength +
+        " ft\n";
+
+
+    text +=
+        "Additional Line Length: " +
+        additionalLength +
+        " ft\n";
+
+
+    text +=
+        "Additional Refrigerant Required: " +
+        chargeRate +
+        " oz/ft\n";
+
+
+    text +=
+        "Additional Refrigerant Charge: " +
+        formatLbOz(
+            lineChargeOz
+        ) +
+        "\n\n";
+
+
+    if (crossPairUsed) {
+
+        text +=
+            "Cross-Pair Used: YES\n";
+
+
+        text +=
+            "Cross-Pair Additional Charge: " +
+            formatLbOz(
+                crossPairOz
+            ) +
+            "\n\n";
+
+    } else {
+
+        text +=
+            "Cross-Pair Used: NO\n\n";
+
+    }
+
+
+    if (otherOz > 0) {
+
+        text +=
+            "Other Additional Charge: " +
+            formatLbOz(
+                otherOz
+            ) +
+            "\n\n";
+
+    }
+
+
+    text +=
+        "TOTAL ADDITIONAL REFRIGERANT: " +
+        formatLbOz(
+            totalAdditionalOz
+        ) +
+        "\n";
+
+
+    text +=
+        "TOTAL SYSTEM REFRIGERANT: " +
+        formatLbOz(
+            totalSystemOz
+        ) +
+        "\n\n";
+
+
+    if (specialRequirement) {
+
+        text +=
+            "MANUFACTURER-SPECIFIC REQUIREMENT:\n";
+
+
+        text +=
+            specialRequirement +
+            "\n";
+
+    }
+
+
+    document.getElementById(
+        "cheersSummary"
+    ).textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   COPY CHEERS
+   ========================================================= */
+
+function copyCheers() {
+
+    const text =
+        document.getElementById(
+            "cheersSummary"
+        ).textContent;
+
+
+    navigator.clipboard.writeText(text)
+        .then(() => {
+
+            alert(
+                "CHEERS information copied."
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   COPY CALCULATION
+   ========================================================= */
+
+function copyCalculation() {
+
+    const text =
+        document.getElementById(
+            "calculationBreakdown"
+        ).textContent;
+
+
+    navigator.clipboard.writeText(text)
+        .then(() => {
+
+            alert(
+                "Calculation copied."
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   MODEL SEARCH
+   ========================================================= */
+
+function searchModels() {
+
+    const search =
+        document.getElementById(
+            "modelSearch"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    const results =
+        document.getElementById(
+            "modelResults"
+        );
+
+
+    results.innerHTML = "";
+
+
+    if (!search) {
+
+        return;
+
+    }
+
+
+    const matches =
+        equipmentDatabase.filter(item =>
+
+            item.manufacturer
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            item.model
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            item.refrigerant
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+
+    matches.forEach(item => {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "model-result";
+
+
+        div.textContent =
+            item.manufacturer +
+            " — " +
+            item.model +
+            " — " +
+            item.refrigerant;
+
+
+        div.onclick = function() {
+
+            loadModel(item);
+
+        };
+
+
+        results.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   LOAD MODEL
+   ========================================================= */
+
+function loadModel(item) {
+
+    document.getElementById(
+        "manufacturer"
+    ).value =
+        item.manufacturer;
+
+
+    document.getElementById(
+        "modelNumber"
+    ).value =
+        item.model;
+
+
+    document.getElementById(
+        "equipmentType"
+    ).value =
+        item.equipmentType;
+
+
+    document.getElementById(
+        "refrigerant"
+    ).value =
+        item.refrigerant;
+
+
+    document.getElementById(
+        "standardLength"
+    ).value =
+        item.standardLength;
+
+
+    document.getElementById(
+        "factoryChargeValue"
+    ).value =
+        item.factoryCharge;
+
+
+    document.getElementById(
+        "factoryChargeUnit"
+    ).value =
+        item.factoryChargeUnit;
+
+
+    document.getElementById(
+        "liquidLineDiameter"
+    ).value =
+        item.liquidDiameter;
+
+
+    document.getElementById(
+        "gasLineDiameter"
+    ).value =
+        item.gasDiameter;
+
+
+    document.getElementById(
+        "chargeRate"
+    ).value =
+        item.chargeRate;
+
+
+    document.getElementById(
+        "manufacturerNotes"
+    ).value =
+        item.notes || "";
+
+
+    convertFactoryCharge();
+
+
+    document.getElementById(
+        "modelResults"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "modelSearch"
+    ).value =
+        item.model;
+
+}
+
+
+/* =========================================================
+   DATABASE RENDER
+   ========================================================= */
+
+function renderDatabase() {
+
+    const table =
+        document.getElementById(
+            "databaseTable"
+        );
+
+
+    const search =
+        document.getElementById(
+            "databaseSearch"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    table.innerHTML = "";
+
+
+    const filtered =
+        equipmentDatabase.filter(item =>
+
+            item.manufacturer
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            item.model
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            item.refrigerant
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+
+    filtered.forEach(item => {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>${escapeHtml(item.manufacturer)}</td>
+
+            <td>${escapeHtml(item.model)}</td>
+
+            <td>${escapeHtml(item.refrigerant)}</td>
+
+            <td>${item.standardLength} ft</td>
+
+            <td>${formatLbOz(
+                item.factoryChargeUnit === "lb"
+                    ? lbToOz(item.factoryCharge)
+                    : item.factoryCharge
+            )}</td>
+
+            <td>${escapeHtml(item.liquidDiameter)}</td>
+
+            <td>${escapeHtml(item.gasDiameter)}</td>
+
+            <td>${item.chargeRate} oz/ft</td>
+
+            <td>
+
+                <button
+                    class="secondary"
+                    onclick="editModel(${item.id})">
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="danger"
+                    onclick="deleteModel(${item.id})">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   OPEN ADD MODEL
+   ========================================================= */
+
+function openAddModel() {
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Add Equipment";
+
+
+    document.getElementById(
+        "editId"
+    ).value = "";
+
+
+    clearDatabaseForm();
+
+
+    document.getElementById(
+        "modelModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+   ========================================================= */
+
+function closeModal() {
+
+    document.getElementById(
+        "modelModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   CLEAR DATABASE FORM
+   ========================================================= */
+
+function clearDatabaseForm() {
+
+    const fields = [
+
+        "dbManufacturer",
+        "dbModel",
+        "dbRefrigerant",
+        "dbStandardLength",
+        "dbFactoryCharge",
+        "dbLiquidDiameter",
+        "dbGasDiameter",
+        "dbChargeRate",
+        "dbNotes"
+
+    ];
+
+
+    fields.forEach(id => {
+
+        document.getElementById(
+            id
+        ).value = "";
+
+    });
+
+
+    document.getElementById(
+        "dbFactoryChargeUnit"
+    ).value =
+        "lb";
+
+
+    document.getElementById(
+        "dbEquipmentType"
+    ).value =
+        "Heat Pump";
+
+}
+
+
+/* =========================================================
+   SAVE MODEL
+   ========================================================= */
+
+function saveModel() {
+
+    const manufacturer =
+        document.getElementById(
+            "dbManufacturer"
+        ).value.trim();
+
+
+    const model =
+        document.getElementById(
+            "dbModel"
+        ).value.trim();
+
+
+    const refrigerant =
+        document.getElementById(
+            "dbRefrigerant"
+        ).value.trim();
+
+
+    const standardLength =
+        Number(
+            document.getElementById(
+                "dbStandardLength"
+            ).value
+        );
+
+
+    if (
+        !manufacturer ||
+        !model ||
+        !refrigerant ||
+        !standardLength
+    ) {
+
+        alert(
+            "Please complete the required fields."
+        );
+
+        return;
+
+    }
+
+
+    const id =
+        document.getElementById(
+            "editId"
+        ).value;
+
+
+    const item = {
+
+        id: id
+            ? Number(id)
+            : Date.now(),
+
+        manufacturer:
+            manufacturer,
+
+        model:
+            model,
+
+        equipmentType:
+            document.getElementById(
+                "dbEquipmentType"
+            ).value,
+
+        refrigerant:
+            refrigerant,
+
+        standardLength:
+            standardLength,
+
+        factoryCharge:
+            Number(
+                document.getElementById(
+                    "dbFactoryCharge"
+                ).value
+            ),
+
+        factoryChargeUnit:
+            document.getElementById(
+                "dbFactoryChargeUnit"
+            ).value,
+
+        liquidDiameter:
+            document.getElementById(
+                "dbLiquidDiameter"
+            ).value,
+
+        gasDiameter:
+            document.getElementById(
+                "dbGasDiameter"
+            ).value,
+
+        chargeRate:
+            Number(
+                document.getElementById(
+                    "dbChargeRate"
+                ).value
+            ),
+
+        notes:
+            document.getElementById(
+                "dbNotes"
+            ).value
+
+    };
+
+
+    if (id) {
+
+        const index =
+            equipmentDatabase.findIndex(
+                x =>
+                    x.id === Number(id)
+            );
+
+
+        equipmentDatabase[index] =
+            item;
+
+    } else {
+
+        equipmentDatabase.push(
+            item
+        );
+
+    }
+
+
+    saveDatabase();
+
+    renderDatabase();
+
+    closeModal();
+
+
+    alert(
+        "Equipment saved."
+    );
+
+}
+
+
+/* =========================================================
+   EDIT MODEL
+   ========================================================= */
+
+function editModel(id) {
+
+    const item =
+        equipmentDatabase.find(
+            x =>
+                x.id === id
+        );
+
+
+    if (!item) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Edit Equipment";
+
+
+    document.getElementById(
+        "editId"
+    ).value =
+        item.id;
+
+
+    document.getElementById(
+        "dbManufacturer"
+    ).value =
+        item.manufacturer;
+
+
+    document.getElementById(
+        "dbModel"
+    ).value =
+        item.model;
+
+
+    document.getElementById(
+        "dbEquipmentType"
+    ).value =
+        item.equipmentType;
+
+
+    document.getElementById(
+        "dbRefrigerant"
+    ).value =
+        item.refrigerant;
+
+
+    document.getElementById(
+        "dbStandardLength"
+    ).value =
+        item.standardLength;
+
+
+    document.getElementById(
+        "dbFactoryCharge"
+    ).value =
+        item.factoryCharge;
+
+
+    document.getElementById(
+        "dbFactoryChargeUnit"
+    ).value =
+        item.factoryChargeUnit;
+
+
+    document.getElementById(
+        "dbLiquidDiameter"
+    ).value =
+        item.liquidDiameter;
+
+
+    document.getElementById(
+        "dbGasDiameter"
+    ).value =
+        item.gasDiameter;
+
+
+    document.getElementById(
+        "dbChargeRate"
+    ).value =
+        item.chargeRate;
+
+
+    document.getElementById(
+        "dbNotes"
+    ).value =
+        item.notes || "";
+
+
+    document.getElementById(
+        "modelModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================================================
+   DELETE MODEL
+   ========================================================= */
+
+function deleteModel(id) {
+
+    if (
+        !confirm(
+            "Delete this equipment?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    equipmentDatabase =
+        equipmentDatabase.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveDatabase();
+
+    renderDatabase();
+
+}
+
+
+/* =========================================================
+   DELETE ALL
+   ========================================================= */
+
+function deleteAllModels() {
+
+    if (
+        !confirm(
+            "Delete ALL equipment from the database?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    equipmentDatabase = [];
+
+
+    saveDatabase();
+
+    renderDatabase();
+
+}
+
+
+/* =========================================================
+   EXPORT DATABASE
+   ========================================================= */
+
+function exportDatabase() {
+
+    const data =
+        JSON.stringify(
+            equipmentDatabase,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [data],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href =
+        url;
+
+
+    a.download =
+        "refrigerant-equipment-database.json";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================================================
+   IMPORT DATABASE
+   ========================================================= */
+
+function importDatabase(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e) {
+
+            try {
+
+                const imported =
+                    JSON.parse(
+                        e.target.result
+                    );
+
+
+                if (
+                    !Array.isArray(
+                        imported
+                    )
+                ) {
+
+                    throw new Error();
+
+                }
+
+
+                equipmentDatabase =
+                    imported;
+
+
+                saveDatabase();
+
+                renderDatabase();
+
+
+                alert(
+                    "Database imported successfully."
+                );
+
+
+            } catch {
+
+                alert(
+                    "Invalid database file."
+                );
+
+            }
+
+        };
+
+
+    reader.readAsText(file);
+
+}
+
+
+/* =========================================================
+   CLEAR CALCULATOR
+   ========================================================= */
+
+function clearCalculator() {
+
+    document
+        .querySelectorAll(
+            "#calculator input"
+        )
+        .forEach(input => {
+
+            if (
+                !input.readOnly
+            ) {
+
+                input.value = "";
+
+            }
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "#calculator textarea"
+        )
+        .forEach(textarea => {
+
+            textarea.value = "";
+
+        });
+
+
+    document.getElementById(
+        "factoryChargeUnit"
+    ).value =
+        "lb";
+
+
+    document.getElementById(
+        "equipmentType"
+    ).value =
+        "Heat Pump";
+
+
+    document.getElementById(
+        "crossPairUsed"
+    ).value =
+        "no";
+
+
+    document.getElementById(
+        "crossPairCharge"
+    ).value =
+        0;
+
+
+    document.getElementById(
+        "crossPairCharge"
+    ).disabled =
+        true;
+
+
+    document.getElementById(
+        "crossPairUnit"
+    ).disabled =
+        true;
+
+
+    document.getElementById(
+        "otherCharge"
+    ).value =
+        0;
+
+
+    document.getElementById(
+        "results"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "factoryConversion"
+    ).textContent =
+        "Enter factory charge above.";
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        renderDatabase();
+
+        convertFactoryCharge();
+
+        toggleCrossPair();
+
+    }
+);
