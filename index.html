@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Refrigerant Charge Calculator
+    </title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <h1>
+            Refrigerant Charge Calculator
+        </h1>
+
+        <p>
+            Equipment refrigerant charge and line-set calculation
+        </p>
+
+    </header>
+
+
+
+    <!-- NAVIGATION -->
+
+    <div class="tabs">
+
+        <button
+            class="tab-button active"
+            onclick="showTab('calculator')">
+
+            Calculator
+
+        </button>
+
+
+        <button
+            class="tab-button"
+            onclick="showTab('database')">
+
+            Equipment Database
+
+        </button>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- CALCULATOR -->
+    <!-- ================================================= -->
+
+    <section id="calculator"
+             class="tab-content active">
+
+
+        <div class="card">
+
+            <h2>
+                Equipment Information
+            </h2>
+
+
+            <!-- MODEL SEARCH -->
+
+            <div class="model-search">
+
+                <label>
+                    Search Equipment Model
+                </label>
+
+                <input
+                    type="text"
+                    id="modelSearch"
+                    placeholder="Type manufacturer or model number..."
+                    oninput="searchModels()"
+                >
+
+
+                <div
+                    id="modelResults"
+                    class="model-results">
+                </div>
+
+            </div>
+
+
+
+            <div class="grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Manufacturer
+                    </label>
+
+                    <input
+                        type="text"
+                        id="manufacturer"
+                        placeholder="Carrier"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Model Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="modelNumber"
+                        placeholder="37MARAQ12AA3"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Serial Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="serialNumber"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Equipment Type
+                    </label>
+
+                    <select id="equipmentType">
+
+                        <option>
+                            Heat Pump
+                        </option>
+
+                        <option>
+                            Air Conditioner
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Refrigerant
+                    </label>
+
+                    <input
+                        type="text"
+                        id="refrigerant"
+                        placeholder="R-454B"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FACTORY CHARGE -->
+
+        <div class="card">
+
+            <h2>
+                Factory Refrigerant Charge
+            </h2>
+
+
+            <div class="grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Factory Charge (lb)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="factoryLb"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 2"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Factory Charge (oz)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="factoryOz"
+                        min="0"
+                        max="15.99"
+                        step="0.01"
+                        placeholder="Example: 0.48"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Factory Charge (Total lb)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="factoryTotalLb"
+                        min="0"
+                        step="0.0001"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <p class="help-text">
+
+                Enter either lb + oz OR the total factory charge in lb.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- LINE SET -->
+
+        <div class="card">
+
+            <h2>
+                Refrigerant Line Information
+            </h2>
+
+
+            <div class="grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Standard Line Length (ft)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="standardLength"
+                        min="0"
+                        step="0.1"
+                        value="24.6"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Installed Line Length (ft)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="installedLength"
+                        min="0"
+                        step="0.1"
+                        placeholder="Example: 50"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Additional Charge Rate (oz/ft)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="chargeRate"
+                        min="0"
+                        step="0.01"
+                        placeholder="Example: 0.16"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CALCULATE -->
+
+        <div class="button-row">
+
+            <button
+                class="primary"
+                onclick="calculate()">
+
+                Calculate Refrigerant Charge
+
+            </button>
+
+
+            <button
+                class="secondary"
+                onclick="clearCalculator()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+
+        <!-- RESULTS -->
+
+        <div
+            id="results"
+            class="card results"
+            style="display:none">
+
+
+            <h2>
+                Refrigerant Charge Calculation
+            </h2>
+
+
+            <div class="result-grid">
+
+
+                <div class="result-box">
+
+                    <span>
+                        Factory Charge
+                    </span>
+
+                    <strong id="resultFactory">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box">
+
+                    <span>
+                        Standard Line
+                    </span>
+
+                    <strong id="resultStandard">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box">
+
+                    <span>
+                        Installed Line
+                    </span>
+
+                    <strong id="resultInstalled">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box">
+
+                    <span>
+                        Additional Line
+                    </span>
+
+                    <strong id="resultAdditionalLine">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box">
+
+                    <span>
+                        Charge Rate
+                    </span>
+
+                    <strong id="resultRate">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box">
+
+                    <span>
+                        Additional Refrigerant
+                    </span>
+
+                    <strong id="resultAdditional">
+                        -
+                    </strong>
+
+                </div>
+
+
+
+                <div class="result-box total">
+
+                    <span>
+                        Total Refrigerant
+                    </span>
+
+                    <strong id="resultTotal">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CHEERS SUMMARY -->
+
+            <div class="cheers-box">
+
+                <h3>
+                    CHEERS Documentation
+                </h3>
+
+
+                <pre id="cheersSummary"></pre>
+
+            </div>
+
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    onclick="copyCheers()">
+
+                    Copy CHEERS Information
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="copyCalculation()">
+
+                    Copy Calculation
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- DATABASE -->
+    <!-- ================================================= -->
+
+    <section
+        id="database"
+        class="tab-content">
+
+
+        <div class="card">
+
+            <div class="database-header">
+
+                <div>
+
+                    <h2>
+                        Equipment Database
+                    </h2>
+
+                    <p>
+                        Add and manage your equipment models.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    onclick="openAddModel()">
+
+                    + Add Equipment
+
+                </button>
+
+            </div>
+
+
+
+            <!-- DATABASE SEARCH -->
+
+            <input
+                type="text"
+                id="databaseSearch"
+                class="database-search"
+                placeholder="Search manufacturer, model, or refrigerant..."
+                oninput="renderDatabase()"
+            >
+
+
+
+            <!-- DATABASE TABLE -->
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Manufacturer
+                            </th>
+
+                            <th>
+                                Model
+                            </th>
+
+                            <th>
+                                Refrigerant
+                            </th>
+
+                            <th>
+                                Factory Charge
+                            </th>
+
+                            <th>
+                                Standard Line
+                            </th>
+
+                            <th>
+                                Rate
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="databaseTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="database-tools">
+
+                <button
+                    class="secondary"
+                    onclick="exportDatabase()">
+
+                    Export Database
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="document.getElementById('importFile').click()">
+
+                    Import Database
+
+                </button>
+
+
+                <input
+                    type="file"
+                    id="importFile"
+                    accept=".json"
+                    style="display:none"
+                    onchange="importDatabase(event)"
+                >
+
+
+                <button
+                    class="danger"
+                    onclick="deleteAllModels()">
+
+                    Delete All
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- ADD / EDIT MODEL MODAL -->
+    <!-- ================================================= -->
+
+    <div
+        id="modelModal"
+        class="modal"
+        style="display:none">
+
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    Add Equipment
+                </h2>
+
+                <button
+                    class="close"
+                    onclick="closeModal()">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+
+            <input
+                type="hidden"
+                id="editId"
+            >
+
+
+            <div class="grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Manufacturer *
+                    </label>
+
+                    <input
+                        id="dbManufacturer"
+                        type="text"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Model Number *
+                    </label>
+
+                    <input
+                        id="dbModel"
+                        type="text"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Equipment Type
+                    </label>
+
+                    <select id="dbEquipmentType">
+
+                        <option>
+                            Heat Pump
+                        </option>
+
+                        <option>
+                            Air Conditioner
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Refrigerant *
+                    </label>
+
+                    <input
+                        id="dbRefrigerant"
+                        type="text"
+                        placeholder="R-454B"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Factory Charge (lb) *
+                    </label>
+
+                    <input
+                        id="dbFactoryLb"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Factory Charge (oz)
+                    </label>
+
+                    <input
+                        id="dbFactoryOz"
+                        type="number"
+                        min="0"
+                        max="15.99"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Standard Line Length (ft) *
+                    </label>
+
+                    <input
+                        id="dbStandardLength"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                    >
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Additional Charge Rate (oz/ft) *
+                    </label>
+
+                    <input
+                        id="dbChargeRate"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+
+                <div class="field full">
+
+                    <label>
+                        Notes
+                    </label>
+
+                    <textarea
+                        id="dbNotes"
+                        rows="3"
+                        placeholder="Manufacturer manual, source, charging notes, etc.">
+                    </textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="button-row">
+
+                <button
+                    class="primary"
+                    onclick="saveModel()">
+
+                    Save Equipment
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <footer>
+
+        Refrigerant values should be verified against the
+        applicable manufacturer's installation documentation.
+
+    </footer>
+
+
+</div>
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
