@@ -238,7 +238,9 @@ textarea:focus {
     background: #eff6ff;
 }
 
-
+.model-results:not(:empty) {
+    display: block;
+    
 .model-result strong {
     display: block;
 }
@@ -306,7 +308,97 @@ button:hover {
 
 
 /* RESULTS */
+/* CALCULATION BREAKDOWN */
 
+.results {
+    border: 2px solid #2563eb;
+}
+
+
+.calculation-box {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ee;
+
+    border-radius: 10px;
+}
+
+
+.calculation-box h3 {
+    margin-top: 0;
+
+    margin-bottom: 15px;
+}
+
+
+.calculation-breakdown {
+    font-family:
+        "Courier New",
+        monospace;
+
+    white-space: pre-wrap;
+
+    line-height: 1.7;
+
+    font-size: 15px;
+
+    color: #1f2937;
+}
+
+
+
+/* FACTORY CHARGE CONVERSION */
+
+.conversion-display {
+    padding: 12px;
+
+    background: #f1f5f9;
+
+    border: 1px solid #dbe3ee;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    color: #334155;
+}
+
+
+
+/* UNIT INPUT */
+
+.unit-input {
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.unit-input input {
+    flex: 1;
+}
+
+
+.unit-input select {
+    width: 90px;
+}
+
+
+
+/* DISABLED FIELDS */
+
+input:disabled,
+select:disabled {
+    background: #e5e7eb;
+
+    cursor: not-allowed;
+
+    color: #64748b;
+}
 .result-grid {
     display: grid;
 
